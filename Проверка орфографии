@@ -1,0 +1,94 @@
+import javax.swing.*;
+import java.awt.event.*;
+import java.io.*;
+import java.util.Timer;
+import java.util.TimerTask;
+
+public class TextEditor extends JFrame {
+    private JTextArea textArea; // Поле для редактирования текста
+    private JFileChooser fileChooser; // Диалоговое окно для выбора файлов
+
+    public TextEditor() {
+        // Создание текстовой области для редактирования
+        textArea = new JTextArea(20, 50);
+        JScrollPane scrollPane = new JScrollPane(textArea); // Добавление прокрутки для текстовой области
+        this.add(scrollPane);
+
+        // Добавление слушателя событий для автозамены
+        textArea.addKeyListener(new KeyAdapter()) {
+            @Override
+            public void keyReleased(KeyEvent e) {
+                if (e.getKeyChar() == ' ') {
+                    startAutoCorrect();
+                }
+            }
+        };
+
+        // Создание строки меню
+        JMenuBar menuBar = new JMenuBar();
+        setJMenuBar(menuBar); // Добавление меню-бара в окно
+
+        // Создание меню "Файл"
+        JMenu fileMenu = new JMenu("Файл");
+        menuBar.add(fileMenu); // Добавление меню "Файл" в меню-бар
+
+        // Создание пункта меню "Открыть"
+        JMenuItem openItem = new JMenuItem("Открыть");
+        fileMenu.add(openItem); // Добавление пункта "Открыть" в меню "Файл"
+        openItem.addActionListener(e -> openFile()); // Добавление слушателя событий для открытия файла
+
+        // Создание пункта меню "Сохранить"
+        JMenuItem saveItem = new JMenuItem("Сохранить");
+        fileMenu.add(saveItem); // Добавление пункта "Сохранить" в меню "Файл"
+        saveItem.addActionListener(e -> saveFile()); // Добавление слушателя событий для сохранения файла
+
+        // Инициализация объекта для выбора файла
+        fileChooser = new JFileChooser();
+
+        // Настройка параметров окна
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // Закрытие приложения при закрытии окна
+        pack(); // Упаковка компонентов в окно
+        setLocationRelativeTo(null); // Расположение окна по центру экрана
+        setVisible(true); // Делаем окно видимым
+    }
+
+// Метод для запуска автозамены - добавлен
+    private void startAutoCorrect() {
+        new Thread(() -> {
+            String text = textArea.getText();
+            String correctedText = text.replaceAll("неправильно", "правильно");
+
+            // Обновление текста в EDT (Event Dispatch Thread)
+            SwingUtilities.invokeLater(() -> textArea.setText(correctedText));
+        }).start();
+    }
+
+    // Метод для открытия файла
+    private void openFile() {
+        if (fileChooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
+            File file = fileChooser.getSelectedFile(); // Получение выбранного файла
+            try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
+                textArea.read(reader, null); // Чтение файла в текстовую область
+            } catch (IOException ex) {
+                JOptionPane.showMessageDialog(this, "Ошибка при открытии файла", "Ошибка", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+    }
+
+    // Метод для сохранения файла
+    private void saveFile() {
+        if (fileChooser.showSaveDialog(this) == JFileChooser.APPROVE_OPTION) {
+            File file = fileChooser.getSelectedFile(); // Получение выбранного файла
+            try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
+                textArea.write(writer); // Сохранение текста из текстовой области в файл
+            } catch (IOException ex) {
+                JOptionPane.showMessageDialog(this, "Ошибка при сохранении файла", "Ошибка", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+    }
+
+    // Главный метод программы
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(TextEditor::new);
+    }
+}
