@@ -1,0 +1,63 @@
+//Показан пример работы 2х методов
+//removeDuplicatesAndWriteToFile: читает строки из исходного файла, удаляет дубликаты и записывает уникальные строки в файл назначения, указывая количество удаленных дубликатов для каждой строки.
+// restoreFile: читает сжатый файл, восстанавливает исходные строки, учитывая количество удаленных дубликатов, и записывает их в новый файл.
+
+import java.io.*;
+import java.nio.file.*;
+import java.util.*;
+
+public class FileProcessor {
+    public static void main(String[] args) throws IOException {
+        String sourceFilePath = "source.txt"; // путь к исходному файлу
+        String destinationFilePath = "destination.txt"; // путь к файлу назначения
+
+        removeDuplicatesAndWriteToFile(sourceFilePath, destinationFilePath);
+        restoreFile(destinationFilePath, "restored.txt");
+    }
+
+    // Метод для удаления дубликатов строк и записи в файл назначения
+    public static void removeDuplicatesAndWriteToFile(String source, String destination) throws IOException {
+        Path sourcePath = Paths.get(source);
+        Path destinationPath = Paths.get(destination);
+
+        Set<String> uniqueLines = new HashSet<>();
+        Map<String, Integer> lineCounts = new HashMap<>();
+
+        // Чтение исходного файла и подсчет дубликатов
+        try (BufferedReader reader = Files.newBufferedReader(sourcePath)) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                uniqueLines.add(line);
+                lineCounts.put(line, lineCounts.getOrDefault(line, 0) + 1);
+            }
+        }
+
+        // Запись уникальных строк и количества удаленных дубликатов в файл назначения
+        try (BufferedWriter writer = Files.newBufferedWriter(destinationPath)) {
+            for (String line : uniqueLines) {
+                writer.write(line + " [Removed duplicates: " + (lineCounts.get(line) - 1) + "]");
+                writer.newLine();
+            }
+        }
+    }
+
+    // Метод для восстановления исходного файла из сжатой версии
+    public static void restoreFile(String compressedFile, String restoredFile) throws IOException {
+        Path compressedFilePath = Paths.get(compressedFile);
+        Path restoredFilePath = Paths.get(restoredFile);
+
+        try (BufferedReader reader = Files.newBufferedReader(compressedFilePath);
+             BufferedWriter writer = Files.newBufferedWriter(restoredFilePath)) {
+
+            String line;
+            while ((line = reader.readLine()) != null) {
+                String[] parts = line.split(" \\[Removed duplicates: ");
+                int count = Integer.parseInt(parts[1].replaceAll("\\D", "")) + 1;
+                for (int i = 0; i < count; i++) {
+                    writer.write(parts[0]);
+                    writer.newLine();
+                }
+            }
+        }
+    }
+}
