@@ -1,0 +1,56 @@
+//Массив объектов типа Animal может содержать как объекты класса Cat, так и объекты класса Dog. 
+// При вызове метода makeSound для каждого элемента массива будет вызываться соответствующая версия метода из дочерних классов, что и демонстирует полиморфизм
+
+class Animal {
+    private String name;
+
+    public Animal(String name) {
+        this.name = name;
+    }
+
+    // Метод для издания звука животного
+    public void makeSound() {
+        System.out.println(name + " издает звук.");
+    }
+}
+
+// Дочерний класс "Кот", наследующий от класса "Животное"
+class Cat extends Animal {
+    public Cat(String name) {
+        super(name); // Вызываем конструктор родительского класса "Животное"
+    }
+
+    // Переопределяем метод для издания звука для кота
+    @Override
+    public void makeSound() {
+        System.out.println(getName() + " мурчит: Мур!");
+    }
+}
+
+// Дочерний класс "Собака", наследующий от класса "Животное"
+class Dog extends Animal {
+    public Dog(String name) {
+        super(name); // Вызываем конструктор родительского класса "Животное"
+    }
+
+    // Переопределяем метод для издания звука для собаки
+    @Override
+    public void makeSound() {
+        System.out.println(getName() + " лает: Гав!");
+    }
+}
+
+public class PolymorphismExample {
+    public static void main(String[] args) {
+        // Создаем массив животных
+        Animal[] animals = new Animal[3];
+        animals[0] = new Cat("Мурзик");
+        animals[1] = new Dog("Барон");
+        animals[2] = new Cat("Вася");
+
+        // Вызываем метод makeSound для каждого элемента массива
+        for (Animal animal : animals) {
+            animal.makeSound();
+        }
+    }
+}
