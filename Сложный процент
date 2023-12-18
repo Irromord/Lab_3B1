@@ -1,0 +1,39 @@
+import java.util.Scanner;
+
+public class CompoundInterestCalculator {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        // Ввод начальной суммы (Число1)
+        System.out.print("Введите начальную сумму (Число1): ");
+        double principal = scanner.nextDouble();
+
+        // Ввод процентной ставки
+        System.out.print("Введите процентную ставку в виде десятичной дроби (например: 0.05 для 5%): ");
+        double interestRate = scanner.nextDouble();
+
+        // Ввод количества периодов
+        System.out.print("Введите количество периодов: ");
+        int periods = scanner.nextInt();
+
+        // Вычисление и вывод будущей суммы (Число2) с учетом сложных процентов
+        double futureValue = calculateFutureValue(principal, interestRate, periods);
+        System.out.println("Число2 после " + periods + " периодов: " + futureValue);
+
+        // Обратное действие: вычисление процентной ставки для достижения целевой суммы (Число2) за N периодов
+        System.out.print("Введите желаемую Число2: ");
+        double targetValue = scanner.nextDouble();
+        double requiredInterestRate = calculateRequiredInterestRate(principal, targetValue, periods);
+        System.out.println("Для достижения Число2 " + targetValue + " за " + periods + " периодов, процентная ставка должна быть " + (requiredInterestRate * 100) + "%");
+    }
+
+    // Метод для вычисления будущей суммы с учетом сложных процентов
+    public static double calculateFutureValue(double principal, double interestRate, int periods) {
+        return principal * Math.pow(1 + interestRate, periods);
+    }
+
+    // Метод для вычисления процентной ставки, необходимой для достижения целевой суммы
+    public static double calculateRequiredInterestRate(double principal, double targetValue, int periods) {
+        return Math.pow(targetValue / principal, 1.0 / periods) - 1;
+    }
+}
