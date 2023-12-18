@@ -1,17 +1,22 @@
 import java.io.*;
- 
+
 class GFG {
      
+    // Метод для сортировки массива методом пузырька
     static void bubbleSort(int arr[], int n)
     {
         int i, j, temp;
         boolean swapped;
+        
+        // Внешний цикл для прохода по всем элементам массива
         for (i = 0; i < n - 1; i++) {
             swapped = false;
+            
+            // Внутренний цикл для сравнения и обмена элементов
             for (j = 0; j < n - i - 1; j++) {
                 if (arr[j] > arr[j + 1]) {
                      
-                    // Swap arr[j] and arr[j+1]
+                    // Обмен arr[j] и arr[j+1]
                     temp = arr[j];
                     arr[j] = arr[j + 1];
                     arr[j + 1] = temp;
@@ -19,13 +24,13 @@ class GFG {
                 }
             }
  
-            // Если никакие два элемента не были заменены внутренним циклом, то прерываем
+            // Если никакие два элемента не были заменены внутренним циклом, то прерываем внешний цикл
             if (swapped == false)
                 break;
         }
     }
  
-    // Функция ждя вывода массива
+    // Метод для вывода массива на экран
     static void printArray(int arr[], int size)
     {
         int i;
@@ -36,7 +41,7 @@ class GFG {
  
     public static void main(String args[])
     {
-        int arr[] = { 64, 34, 25, 12, 22, 11, 90 };
+        int arr[] = { 52, 14, 47, 22, 52, 31, 6 };
         int n = arr.length;
         bubbleSort(arr, n);
         System.out.println("Sorted array: ");
