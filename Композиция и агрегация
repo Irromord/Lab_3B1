@@ -1,0 +1,70 @@
+// Course и Module демонстрируют композицию, где Course является контейнером для Module.
+// А pythonCourse и Module демонстрируют агрегацию, где Course агрегирует Module, но Module может существовать независимо от Course.
+
+// Класс "Учебный модуль"
+class Module {
+    private String name;
+
+    public Module(String name) {
+        this.name = name;
+    }
+
+    // Метод для получения имени учебного модуля
+    public String getName() {
+        return name;
+    }
+}
+
+// Класс "Учебный курс", который содержит учебные модули как часть
+class Course {
+    private String courseName;
+    private Module[] modules; // Массив объектов "Учебный модуль"
+
+    // Конструктор класса "Учебный курс"
+    public Course(String courseName, int moduleCount) {
+        this.courseName = courseName;
+        modules = new Module[moduleCount]; // Создаем массив объектов "Учебный модуль" внутри класса "Учебный курс"
+    }
+
+    // Метод для добавления учебного модуля в курс
+    public void addModule(int index, Module module) {
+        modules[index] = module;
+    }
+
+    // Метод для получения имени курса
+    public String getCourseName() {
+        return courseName;
+    }
+
+    // Метод для получения имени учебного модуля по индексу
+    public String getModuleName(int index) {
+        return modules[index].getName();
+    }
+}
+
+public class CompositionVsAggregation {
+    public static void main(String[] args) {
+        // Пример композиции
+        Course javaCourse = new Course("Java Programming", 3);
+        javaCourse.addModule(0, new Module("Introduction to Java"));
+        javaCourse.addModule(1, new Module("Object-Oriented Programming"));
+        javaCourse.addModule(2, new Module("Advanced Java"));
+
+        // Пример агрегации
+        Course pythonCourse = new Course("Python Programming", 2);
+        pythonCourse.addModule(0, new Module("Python Basics"));
+        pythonCourse.addModule(1, new Module("Data Science with Python"));
+
+        System.out.println("Курс: " + javaCourse.getCourseName());
+        System.out.println("Модули курса:");
+        for (int i = 0; i < 3; i++) {
+            System.out.println(javaCourse.getModuleName(i));
+        }
+
+        System.out.println("\nКурс: " + pythonCourse.getCourseName());
+        System.out.println("Модули курса:");
+        for (int i = 0; i < 2; i++) {
+            System.out.println(pythonCourse.getModuleName(i));
+        }
+    }
+}
