@@ -1,0 +1,42 @@
+import javax.swing.*;
+import java.awt.*;
+
+public class LayoutDemo extends JFrame {
+
+    public LayoutDemo() {
+        // Установка BorderLayout для JFrame
+        this.setLayout(new BorderLayout());
+
+        // Создание панели с FlowLayout
+        JPanel flowLayoutPanel = new JPanel();
+        flowLayoutPanel.setLayout(new FlowLayout());
+
+        // Добавление кнопок на панель с FlowLayout
+        flowLayoutPanel.add(new JButton("Кнопка 1"));
+        flowLayoutPanel.add(new JButton("Кнопка 2"));
+        flowLayoutPanel.add(new JButton("Кнопка 3"));
+
+        // Добавление панели на JFrame
+        this.add(flowLayoutPanel, BorderLayout.NORTH); // Панель размещается в верхней части окна
+
+        // Добавление других компонентов на JFrame
+        this.add(new JButton("Восток"), BorderLayout.EAST);
+        this.add(new JButton("Запад"), BorderLayout.WEST);
+        this.add(new JButton("Юг"), BorderLayout.SOUTH);
+        this.add(new JButton("Центр"), BorderLayout.CENTER);
+
+        // Настройка основных параметров окна
+        this.setTitle("Пример компоновки");
+        this.setSize(400, 300);
+        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        this.setLocationRelativeTo(null); // Расположение окна по центру экрана
+    }
+
+    public static void main(String[] args) {
+        // Создание и отображение окна
+        SwingUtilities.invokeLater(() -> {
+            LayoutDemo frame = new LayoutDemo();
+            frame.setVisible(true);
+        });
+    }
+}
