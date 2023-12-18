@@ -1,0 +1,61 @@
+import javax.swing.*;
+import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.DefaultTreeModel;
+import javax.xml.parsers.*;
+import org.w3c.dom.*;
+import java.io.File;
+
+public class XMLTreeViewer extends JFrame {
+    private JTree tree;
+
+    public XMLTreeViewer() {
+        // Настройка окна
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setSize(400, 500);
+        setLocationRelativeTo(null);
+
+        // Загрузка и разбор XML-файла
+        DefaultMutableTreeNode root = loadXML("example.xml");
+
+        // Создание модели дерева и добавление ее в JTree
+        tree = new JTree(root);
+        JScrollPane scrollPane = new JScrollPane(tree);
+        add(scrollPane);
+
+        setVisible(true);
+    }
+
+    // Метод для загрузки и разбора XML-файла
+    private DefaultMutableTreeNode loadXML(String filePath) {
+        try {
+            File xmlFile = new File(filePath);
+            DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+            DocumentBuilder builder = factory.newDocumentBuilder();
+            Document document = builder.parse(xmlFile);
+            document.getDocumentElement().normalize();
+
+            return buildTree(document.getDocumentElement());
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    // Метод для создания узлов дерева из элементов XML
+    private DefaultMutableTreeNode buildTree(Node node) {
+        DefaultMutableTreeNode treeNode = new DefaultMutableTreeNode(node.getNodeName());
+
+        NodeList nodeList = node.getChildNodes();
+        for (int i = 0; i < nodeList.getLength(); i++) {
+            Node currentNode = nodeList.item(i);
+            if (currentNode.getNodeType() == Node.ELEMENT_NODE) {
+                treeNode.add(buildTree(currentNode));
+            }
+        }
+        return treeNode;
+    }
+
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(XMLTreeViewer::new);
+    }
+}
