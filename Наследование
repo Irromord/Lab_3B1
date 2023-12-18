@@ -1,45 +1,101 @@
-// Простой пример наследования.
-// Создать суперкласс.
-class A {
-int i, j;
-void showij() {
-System.out.println("i и j: " + i + " " + j);
+// Базовый класс "Фигура"
+class Shape {
+    private String color;
+    private double area;
+
+    // Конструктор класса "Фигура"
+    public Shape(String color) {
+        this.color = color;
+        this.area = 0.0;
+    }
+
+    // Метод для получения цвета фигуры
+    public String getColor() {
+        return color;
+    }
+
+    // Метод для получения площади фигуры
+    public double getArea() {
+        return area;
+    }
+
+    // Метод для вычисления площади фигуры (будет переопределен в дочерних классах)
+    public void calculateArea() {
+        // Здесь можно реализовать вычисление площади для конкретной фигуры
+    }
 }
+
+// Дочерний класс "Круг", наследующий от класса "Фигура"
+class Circle extends Shape {
+    private double radius;
+
+    // Конструктор класса "Круг"
+    public Circle(String color, double radius) {
+        super(color); // Вызываем конструктор родительского класса "Фигура"
+        this.radius = radius;
+        calculateArea(); // Вычисляем площадь круга при создании объекта
+    }
+
+    // Переопределяем метод для вычисления площади круга
+    @Override
+    public void calculateArea() {
+        setArea(Math.PI * radius * radius);
+    }
+
+    // Метод для получения радиуса круга
+    public double getRadius() {
+        return radius;
+    }
 }
-// Создать подкласс расширением класса А.
-class В extends A {
-int k;
-void showk() {
-System.out.println("k: " + k);
+
+// Дочерний класс "Прямоугольник", наследующий от класса "Фигура"
+class Rectangle extends Shape {
+    private double width;
+    private double height;
+
+    // Конструктор класса "Прямоугольник"
+    public Rectangle(String color, double width, double height) {
+        super(color); // Вызываем конструктор родительского класса "Фигура"
+        this.width = width;
+        this.height = height;
+        calculateArea(); // Вычисляем площадь прямоугольника при создании объекта
+    }
+
+    // Переопределяем метод для вычисления площади прямоугольника
+    @Override
+    public void calculateArea() {
+        setArea(width * height);
+    }
+
+    // Метод для получения ширины прямоугольника
+    public double getWidth() {
+        return width;
+    }
+
+    // Метод для получения высоты прямоугольника
+    public double getHeight() {
+        return height;
+    }
 }
-void sum() {
-System.out.println("i+j+k: " + (i + j + k));
+
+public class InheritanceExample {
+    public static void main(String[] args) {
+        // Создаем объект класса "Круг"
+        Circle circle = new Circle("Красный", 5.0);
+
+        // Создаем объект класса "Прямоугольник"
+        Rectangle rectangle = new Rectangle("Синий", 4.0, 6.0);
+
+        // Выводим информацию о фигурах
+        System.out.println("Фигура: Круг");
+        System.out.println("Цвет: " + circle.getColor());
+        System.out.println("Радиус: " + circle.getRadius());
+        System.out.println("Площадь: " + circle.getArea());
+
+        System.out.println("\nФигура: Прямоугольник");
+        System.out.println("Цвет: " + rectangle.getColor());
+        System.out.println("Ширина: " + rectangle.getWidth());
+        System.out.println("Высота: " + rectangle.getHeight());
+        System.out.println("Площадь: " + rectangle.getArea());
+    }
 }
-}
-class Simplelnheritance {
-public static void main(String args[]){
-A superOb = new A();
-В subOb = new В();
-// Суперкласс может быть использован сам по себе.
-superOb.i = 10;
-superOb.j = 20;
-System.out.println("Содержимое superOb: ");
-superOb.showij();
-System.out.println();
-/* Подкласс имеет доступ ко всем public-членам
-его суперкласса. */
-subOb.i = 7;
-subOb.j = 8;
-subOb.k = 9;
-System.out.println("Содержимое of subOb: ");
-subOb.showij();
-subOb.showk();
-System.out.println();
-System.out.println("Сумма i, j и k в subOb:");
-subOb.sum();
-}
-}
-Подкласс B включает все члены его суперкласса A. Вот почему
-объект subOb может обращаться к i и j и вызывать showij(). Поэтому же
-внутри sum() можно прямо ссылаться на i и j, как если бы они были
-частью B.
