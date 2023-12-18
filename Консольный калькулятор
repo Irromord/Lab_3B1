@@ -1,0 +1,68 @@
+import java.util.Scanner;
+
+public class Calculator {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        System.out.print("Введите выражение (например, x * y): ");
+        String input = scanner.nextLine();
+
+        try {
+            double result = evaluateExpression(input);
+            System.out.println("Результат: " + result);
+        } catch (IllegalArgumentException e) {
+            System.out.println("Ошибка: " + e.getMessage());
+        }
+    }
+
+    // Метод для вычисления результата арифметического выражения
+    public static double evaluateExpression(String expression) {
+        // Разбиение входной строки на токены (операнды и оператор)
+        String[] tokens = expression.split(" ");
+
+        // Проверка на корректное количество токенов (3 токена - операнд1, оператор, операнд2)
+        if (tokens.length != 3) {
+            throw new IllegalArgumentException("Неверный формат выражения. Используйте пробел между операндами и оператором.");
+        }
+
+        double operand1;
+        double operand2;
+        String operator;
+
+        try {
+            // Преобразование строковых операндов в числа
+            operand1 = Double.parseDouble(tokens[0]);
+            operator = tokens[1];
+            operand2 = Double.parseDouble(tokens[2]);
+        } catch (NumberFormatException e) {
+            throw new IllegalArgumentException("Неверные операнды. Введите числа.");
+        }
+
+        double result;
+
+        // Выполнение арифметической операции в зависимости от оператора
+        switch (operator) {
+            case "+":
+                result = operand1 + operand2;
+                break;
+            case "-":
+                result = operand1 - operand2;
+                break;
+            case "*":
+                result = operand1 * operand2;
+                break;
+            case "/":
+                // Проверка на деление на ноль
+                if (operand2 != 0) {
+                    result = operand1 / operand2;
+                } else {
+                    throw new IllegalArgumentException("Деление на ноль.");
+                }
+                break;
+            default:
+                throw new IllegalArgumentException("Неверный оператор. Используйте +, -, *, или /.");
+        }
+
+        return result;
+    }
+}
