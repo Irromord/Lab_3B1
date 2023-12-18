@@ -1,70 +1,107 @@
+package animals;
+
 // Интерфейс для животных
-interface Animal {
-    void eat();
-    void sleep();
+public interface Animal {
+    void eat();   
+    void sleep();  
 }
 
-// Базовый класс для всех животных
-abstract class AnimalBase implements Animal {
+// Абстрактный класс для всех животных
+public abstract class AnimalBase implements Animal {
     protected String name;
     protected int age;
 
+    // Конструктор класса "AnimalBase"
     public AnimalBase(String name, int age) {
         this.name = name;
         this.age = age;
     }
 
-    public abstract void makeSound();
+    public abstract void makeSound();  // Абстрактный метод для издания звука
 
     @Override
     public void eat() {
-        System.out.println(name + " is eating.");
+        System.out.println(name + " is eating.");  // Реализация метода "eat" для всех животных
     }
 
     @Override
     public void sleep() {
-        System.out.println(name + " is sleeping.");
+        System.out.println(name + " is sleeping.");  // Реализация метода "sleep" для всех животных
     }
 }
 
+// Пакет "mammals"
+package animals.mammals;
+
+import animals.AnimalBase;
+
+// Класс для млекопитающих
+public abstract class Mammal extends AnimalBase {
+    public Mammal(String name, int age) {
+        super(name, age);
+    }
+
+    public abstract void giveBirth();  // Абстрактный метод для потомства
+}
+
 // Класс для тигров
-class Tiger extends AnimalBase {
+public class Tiger extends Mammal {
     public Tiger(String name, int age) {
         super(name, age);
     }
 
     @Override
     public void makeSound() {
-        System.out.println("Roar!");
-    }
-}
-
-// Класс для слонов
-class Elephant extends AnimalBase {
-    public Elephant(String name, int age) {
-        super(name, age);
+        System.out.println("Roar!");  // Реализация метода "makeSound" для тигров
     }
 
     @Override
-    public void makeSound() {
-        System.out.println("Trumpet!");
+    public void giveBirth() {
+        System.out.println(name + " gives birth to cubs.");  // Реализация метода "giveBirth" для тигров
     }
 }
 
+// Пакет "birds"
+package animals.birds;
+
+import animals.AnimalBase;
+
+// Класс для птиц
+public abstract class Bird extends AnimalBase {
+    public Bird(String name, int age) {
+        super(name, age);
+    }
+
+    public abstract void layEggs();  // Абстрактный метод для откладывания яиц
+}
+
 // Класс для пингвинов
-class Penguin extends AnimalBase {
+public class Penguin extends Bird {
     public Penguin(String name, int age) {
         super(name, age);
     }
 
     @Override
     public void makeSound() {
-        System.out.println("Hoot!");
+        System.out.println("Hoot!");  // Реализация метода "makeSound" для пингвинов
+    }
+
+    @Override
+    public void layEggs() {
+        System.out.println(name + " lays eggs.");  // Реализация метода "layEggs" для пингвинов
     }
 }
 
+// Пакет "zoo"
+package zoo;
+
+import animals.Animal;
+
+import java.util.ArrayList;
+import java.util.List;
+
 // Класс для зоопарка
-class Zoo {
+public class Zoo {
     private List<Animal> animals;
 
     public Zoo() {
@@ -72,36 +109,18 @@ class Zoo {
     }
 
     public void addAnimal(Animal animal) {
-        animals.add(animal);
+        animals.add(animal);  // Добавление животного в зоопарк
     }
 
     public void feedAnimals() {
         for (Animal animal : animals) {
-            animal.eat();
+            animal.eat();  // Кормление всех животных в зоопарке
         }
     }
 
     public void makeAnimalsSleep() {
         for (Animal animal : animals) {
-            animal.sleep();
+            animal.sleep();  // Все животные спят
         }
-    }
-}
-
-// Пример использования
-public class Main {
-    public static void main(String[] args) {
-        Zoo zoo = new Zoo();
-
-        Tiger tiger = new Tiger("Tiger", 5);
-        Elephant elephant = new Elephant("Elephant", 10);
-        Penguin penguin = new Penguin("Penguin", 2);
-
-        zoo.addAnimal(tiger);
-        zoo.addAnimal(elephant);
-        zoo.addAnimal(penguin);
-
-        zoo.feedAnimals();
-        zoo.makeAnimalsSleep();
     }
 }
